@@ -1,9 +1,9 @@
 const path = require("path");
 const fastify = require("fastify")({ logger: false });
 
-// Serve static files from /public
+// Serve static files from ../docs for local development
 fastify.register(require("@fastify/static"), {
-  root: path.join(__dirname, "public"),
+  root: path.join(__dirname, "../docs"),
   prefix: "/"
 });
 
@@ -12,20 +12,11 @@ fastify.register(require("@fastify/formbody"));
 
 // ===== ROUTES =====
 
-// Login page as homepage
+// Serve index page at root
 fastify.get("/", function (request, reply) {
-  return reply.sendFile("login.html");
+  return reply.sendFile("index.html");
 });
 
-// Route for success screen
-fastify.get("/success", function (request, reply) {
-  return reply.sendFile("success.html");
-});
-
-// Route for failure screen
-fastify.get("/glitch-fail", function (request, reply) {
-  return reply.sendFile("glitch-fail.html");
-});
 
 // Routes for chapters
 fastify.get("/chapter0", function (request, reply) {
@@ -41,15 +32,6 @@ fastify.get("/chapter3", function (request, reply) {
   return reply.sendFile("chapter3.html");
 });
 
-// Code verification logic
-fastify.post("/verify-code", function (request, reply) {
-  const code = request.body.code.trim().toUpperCase();
-  if (code === "MAO") {
-    return reply.redirect("/success");
-  } else {
-    return reply.redirect("/glitch-fail");
-  }
-});
 
 // ===== START SERVER =====
 fastify.listen({ port: process.env.PORT, host: "0.0.0.0" }, function (err, address) {
