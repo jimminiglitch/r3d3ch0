@@ -180,152 +180,44 @@
     Continue &gt;
   </button>
 
-  <script>
-    function triggerFlicker() {
-  setTimeout(() => {
-    window.location.href = "https://nepocorphq.glitch.me/";
-  }, 300);
-}
-
-    const transcriptText = NepoCorp HQ
-
-Normally, I wouldn’t be caught dead in a place like this.
-Hell, I barely leave Brooklyn, fuchristsakes. But here I am, standing in the belly of some finance dooshbags’s wet dream, a grotesque monument to
-complete and utter bullshit.
-
-It’s all sleek suits and terrible art, a shrine to excess and small dick compensation, where wannabe executives bark into Nokias like they're negotiating the fate of the free world, when really they’re just trying to expense another steakhouse lunch.
-
-These people live off stress, cocaine, and quarterly
-projections.
-
-I do not belong here. 
-
-I know it. They know it.
-
-But wouldn't you know it, 
-
-I got a cousin who works security.
-
-It’s funny how easy it is to get into places like this when
-the right people are doing the wrong things.
-
-For my cousin, its a pretty good gig. Not that the
-rent-a-cop gig itself makes from peanuts; but his real dough comes from slinging
-yayo to the junior Gekkos what can’t cope wit' the stress of working the 80-hour weeks just so's to inflate some Harvard dickhead’s bottom line.
-
-So I tells cousin Neil I got some "business" to take care of downstairs, and he barely looks up from his Playboy. He just swipes his badge, mutterin' “Don’t get me fired, ya mook”, and lets me right into the executive elevator.
-Sub-level 50
-
-Sub-level 50
-
-Ding!
-
-The doors open onto Sub-Level 50, and everything changes.
-
-No more corporate "art." No more networking weasels in cufflinks. 
-
-Down here, it’s all cinderblock walls and flickering fluorescents.
-
-A server room is purrin' static down the hall, racks on racks filled with outdated beige towers. 
-
-NepoCorp ain’t a tech company, but I bet they got enough offshore shell companies and SEC-dodging schemes to justify keeping a black hole like this running.
-The Terminal
-
-It sits in the corner of some kinda data containment room.
-
-Good old DOS. No branding, no logo. Just a single 'C' prompt in the corner of the screen.
-
-This thing belongs here as much as I do: bupkis.
-
-Everything else in the room is standard corporate junk—locked filing cabinets, dot-matrix printouts, a whiteboard with a cartoon doodle of a schlong.
-
-Somehow, somebody got into NepoCorp’s infrastructure and
-carved out a little space for themselves. A little backdoor or what have you. Kudos.
-
-Okay, here it is, let's see if I can remember that password...;
-
-    const transcriptContainer = document.getElementById('transcript');
-    const audio = document.getElementById('chapter2audio');
-    const audioSpeed = document.getElementById('audioSpeed');
-    const speedButtons = document.querySelectorAll('.speed-control button');
-    const startBtn = document.getElementById('startBtn');
-    const continueBtn = document.getElementById('continueBtn');
-    let i = 0;
-    let isTyping = false;
-    let textSpeed = 8;
-    let typingInterval;
-
-    // Update audio playback rate based on slider
-    audioSpeed.addEventListener('input', () => {
-      audio.playbackRate = parseFloat(audioSpeed.value);
+<script src="js/transcribe.js"></script>
+<script>
+  const transcriptContainer = document.getElementById("transcript");
+  const audio = document.getElementById("chapter2audio");
+  const audioSpeed = document.getElementById("audioSpeed");
+  const speedButtons = document.querySelectorAll(".speed-control button");
+  const startBtn = document.getElementById("startBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  audioSpeed.addEventListener("input", () => {
+    audio.playbackRate = parseFloat(audioSpeed.value);
+  });
+  speedButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      speedButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
     });
-
-    // Set text speed based on selected button
-    speedButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        speedButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        textSpeed = parseInt(button.getAttribute('data-speed'));
-      });
-    });
-
-    function typeNextChar() {
-      if (!isTyping || i >= transcriptText.length) return;
-      transcriptContainer.innerHTML += transcriptText.charAt(i);
-      i++;
-      // When trigger text is reached, enable the start button
-      if (transcriptText.includes("I can remember that password...") &&
-          i > transcriptText.indexOf("I can remember that password...") + 10) {
-        startBtn.style.opacity = 1;
-        startBtn.style.pointerEvents = 'auto';
-      }
-      typingInterval = setTimeout(typeNextChar, textSpeed);
-    }
-
-    audio.addEventListener('play', () => {
-      if (!isTyping) {
-        isTyping = true;
-        setTimeout(typeNextChar, 4000);
-      }
-    });
-
-    audio.addEventListener('pause', () => {
-      clearTimeout(typingInterval);
-      isTyping = false;
-    });
-
-    function skipText() {
-      // Instantly complete the transcript text
-      clearTimeout(typingInterval);
-      isTyping = false;
-      transcriptContainer.innerHTML = transcriptText;
-      i = transcriptText.length;
-      // Reset and stop the audio player
-      audio.pause();
-      audio.currentTime = 0;
-      // Enable the start button since the text is done
-      startBtn.style.opacity = 1;
-      startBtn.style.pointerEvents = 'auto';
-    }
-
-    function activateArcade() {
-      // Add a quick flash effect then reveal the game embed
-      document.getElementById('glitchFlash').style.display = 'block';
+  });
+  attachTranscription(audio);
+  function skipText() {
+    audio.pause();
+    startBtn.style.opacity = 1;
+    startBtn.style.pointerEvents = "auto";
+  }
+  function activateArcade() {
+    document.getElementById("glitchFlash").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("glitchFlash").style.display = "none";
+      transcriptContainer.style.display = "none";
+      document.getElementById("skipBtn").style.display = "none";
+      startBtn.style.display = "none";
+      document.getElementById("gameEmbed").style.display = "block";
       setTimeout(() => {
-        document.getElementById('glitchFlash').style.display = 'none';
-        transcriptContainer.style.display = 'none';
-        // Hide the skip and start buttons once arcade opens
-        document.getElementById('skipBtn').style.display = 'none';
-        startBtn.style.display = 'none';
-        document.getElementById('gameEmbed').style.display = 'block';
-        // Start a 60-second timer before enabling the continue button
-        setTimeout(() => {
-          continueBtn.disabled = false;
-          continueBtn.style.opacity = 1;
-          continueBtn.style.pointerEvents = 'auto';
-        }, 10000);
-      }, 400);
-    }
-  </script>
+        continueBtn.disabled = false;
+        continueBtn.style.opacity = 1;
+        continueBtn.style.pointerEvents = "auto";
+      }, 10000);
+    }, 400);
+  }
+</script>
 </body>
 </html>

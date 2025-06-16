@@ -217,132 +217,44 @@
       Continue &gt;
     </button>
 
-    <script>
-      function triggerFlicker() {
-        setTimeout(() => {
-          window.location.href = "https://duderockarcade.glitch.me/";
-        }, 300);
-      }
-
-      const transcriptText = Coney Island in the Summer:
-
-The sand is hot enough to fry a knish, the boardwalk’s creaky as hell, and some guy in a tank top that says BOSS OF ALL BOSSES is screaming at
-a claw machine like it owes him money.
-
-There’s a kid crying. There’s always a kid crying.
-
-I weave through the boardwalk chaos, past the fortune tellers and the knockoff Oakley vendors, past a guy who’s either selling hot dogs or running a numbers game--or both, maybe. My brain says I should go hit the Cyclone first, let my bones realign themselves through some high-velocity chiropractic adjustment, but my gut says otherwise.
-
-My gut says
-something’s off.
-
-The arcades are mostly the same as they’ve always been. Sticky floors, busted air conditioning, cigarette burns on the cabinets. A small congregation of teenagers hovers around Tekken 3, throwing around some insults that’d make their grandmothers faint silly--but there’s something different here.
-
-Something... weird.
-
-The Machine
-
-It’s in the back corner, where the light don’t hardly reach.
-
-There’s a whole string of half-dead bulbs above it, flickering just enough to make it look like this thing exists in some slightly different dimension.
-
-No marquee. No branding.
-
-Just a plain black cabinet with a glowing start button.
-
-I don’t even sees nowhere for the quarters to go.
-
-Shit, I think this
-baby is free play!
-
-I steps a little closer.
-
-The screen flickers and what not…;
-
-      const transcriptContainer = document.getElementById("transcript");
-      const audio = document.getElementById("chapter1audio");
-      const audioSpeed = document.getElementById("audioSpeed");
-      const speedButtons = document.querySelectorAll(".speed-control button");
-      const startBtn = document.getElementById("startBtn");
-      const continueBtn = document.getElementById("continueBtn");
-      let i = 0;
-      let isTyping = false;
-      let textSpeed = 8;
-      let typingInterval;
-
-      // Update audio playback rate based on slider
-      audioSpeed.addEventListener("input", () => {
-        audio.playbackRate = parseFloat(audioSpeed.value);
-      });
-
-      // Set text speed based on selected button
-      speedButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          speedButtons.forEach((btn) => btn.classList.remove("active"));
-          button.classList.add("active");
-          textSpeed = parseInt(button.getAttribute("data-speed"));
-        });
-      });
-
-      function typeNextChar() {
-        if (!isTyping || i >= transcriptText.length) return;
-        transcriptContainer.innerHTML += transcriptText.charAt(i);
-        i++;
-        // When trigger text is reached, enable the start button
-        if (
-          transcriptText.includes("The screen flickers and what not…") &&
-          i > transcriptText.indexOf("The screen flickers and what not…") + 10
-        ) {
-          startBtn.style.opacity = 1;
-          startBtn.style.pointerEvents = "auto";
-        }
-        typingInterval = setTimeout(typeNextChar, textSpeed);
-      }
-
-      audio.addEventListener("play", () => {
-        if (!isTyping) {
-          isTyping = true;
-          setTimeout(typeNextChar, 4000);
-        }
-      });
-
-      audio.addEventListener("pause", () => {
-        clearTimeout(typingInterval);
-        isTyping = false;
-      });
-
-      function skipText() {
-        // Instantly complete the transcript text
-        clearTimeout(typingInterval);
-        isTyping = false;
-        transcriptContainer.innerHTML = transcriptText;
-        i = transcriptText.length;
-        // Reset and stop the audio player
-        audio.pause();
-        audio.currentTime = 0;
-        // Enable the start button since the text is done
-        startBtn.style.opacity = 1;
-        startBtn.style.pointerEvents = "auto";
-      }
-
-      function activateArcade() {
-        // Add a quick flash effect then reveal the game embed
-        document.getElementById("glitchFlash").style.display = "block";
-        setTimeout(() => {
-          document.getElementById("glitchFlash").style.display = "none";
-          transcriptContainer.style.display = "none";
-          // Hide the skip and start buttons once arcade opens
-          document.getElementById("skipBtn").style.display = "none";
-          startBtn.style.display = "none";
-          document.getElementById("gameEmbed").style.display = "block";
-          // Start a 60-second timer before enabling the continue button
-          setTimeout(() => {
-            continueBtn.disabled = false;
-            continueBtn.style.opacity = 1;
-            continueBtn.style.pointerEvents = "auto";
-          }, 10000);
-        }, 400);
-      }
-    </script>
+<script src="js/transcribe.js"></script>
+<script>
+  const transcriptContainer = document.getElementById("transcript");
+  const audio = document.getElementById("chapter1audio");
+  const audioSpeed = document.getElementById("audioSpeed");
+  const speedButtons = document.querySelectorAll(".speed-control button");
+  const startBtn = document.getElementById("startBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  audioSpeed.addEventListener("input", () => {
+    audio.playbackRate = parseFloat(audioSpeed.value);
+  });
+  speedButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      speedButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+  attachTranscription(audio);
+  function skipText() {
+    audio.pause();
+    startBtn.style.opacity = 1;
+    startBtn.style.pointerEvents = "auto";
+  }
+  function activateArcade() {
+    document.getElementById("glitchFlash").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("glitchFlash").style.display = "none";
+      transcriptContainer.style.display = "none";
+      document.getElementById("skipBtn").style.display = "none";
+      startBtn.style.display = "none";
+      document.getElementById("gameEmbed").style.display = "block";
+      setTimeout(() => {
+        continueBtn.disabled = false;
+        continueBtn.style.opacity = 1;
+        continueBtn.style.pointerEvents = "auto";
+      }, 10000);
+    }, 400);
+  }
+</script>
   </body>
 </html>
