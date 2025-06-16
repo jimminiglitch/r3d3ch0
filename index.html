@@ -357,15 +357,9 @@
       />
     </header>
 
-    <div
-      class="terminal-container"
-      id="terminalContainer"
-    >
-      class="terminal-container"
-      id="terminalContainer"
-      style="display: none"
-    >
+    <div class="terminal-container" id="terminalContainer">
       <input type="text" id="codeInput" placeholder="Enter code" readonly />
+      <div class="keypad">
         <button type="button" onclick="enterDigit('1')">1</button>
         <button type="button" onclick="enterDigit('2')">2</button>
         <button type="button" onclick="enterDigit('3')">3</button>
@@ -378,10 +372,8 @@
         <button type="button" onclick="backspace()">←</button>
         <button type="button" onclick="clearCode()">Clear</button>
         <button type="button" onclick="submitCode()">Enter</button>
-        <button onclick="backspace()">←</button>
-        <button onclick="clearCode()">Clear</button>
-        <button onclick="submitCode()">Enter</button>
       </div>
+      <div id="statusMessage"></div>
     </div>
 
     <!-- SCRIPTS -->
