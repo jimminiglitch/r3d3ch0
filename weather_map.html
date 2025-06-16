@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weather Map Demo</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
 <style>
@@ -12,20 +13,20 @@
 </style>
 </head>
 <body>
-<details open id="filterSection">
+<details id="filterSection">
   <summary>Data Filters</summary>
   <label><input type="checkbox" id="radarToggle" checked> Show Radar</label>
   <label style="margin-left:1em"><input type="checkbox" id="gridToggle" checked> Show Grid</label>
 </details>
-<details open id="mapSection">
+<details id="mapSection">
   <summary>Map</summary>
   <div id="map"></div>
 </details>
-<details open id="gridSection">
+<details id="gridSection">
   <summary>Weather Grid Info</summary>
   <p>The grid overlay helps visualize tile boundaries.</p>
 </details>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js" defer></script>
 <script>
 const map = L.map('map').setView([40.7, -74], 6);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -41,7 +42,8 @@ function loadRadar() {
       radarLayer = L.tileLayer(`https://tilecache.rainviewer.com/v2/radar/${ts}/256/{z}/{x}/{y}/2/1_1.png`, {
         attribution: '&copy; RainViewer', opacity: 0.6
       }).addTo(map);
-    });
+    })
+    .catch(err => console.error('Radar load error:', err));
 }
 loadRadar();
 
