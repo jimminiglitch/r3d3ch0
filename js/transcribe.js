@@ -1,44 +1,33 @@
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const supportsRecognition = !!SpeechRecognition && window.isSecureContext;
-if (supportsRecognition) {
-  const recognition = new SpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
-  let finalTranscript = '';
-
-  recognition.onresult = (event) => {
-    let interim = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const text = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript += text + ' ';
-      } else {
-        interim += text;
+function attachTranscription(audio, transcriptUrl) {
+  if (!audio || !transcriptUrl) return;
+  fetch(transcriptUrl)
+    .then((resp) => resp.text())
+    .then((text) => {
+      const container = document.getElementById('transcript');
+      if (!container) return;
+      let index = 0;
+      let timer;
+      const type = () => {
+        if (index <= text.length) {
+          container.textContent = text.slice(0, index);
+          index += 1;
+        } else {
+          clearInterval(timer);
+        }
+      };
+      audio.addEventListener('play', () => {
+        timer = setInterval(type, 50);
+      });
+      const stop = () => clearInterval(timer);
+      audio.addEventListener('pause', stop);
+      audio.addEventListener('ended', stop);
+    })
+    .catch((err) => {
+      const container = document.getElementById('transcript');
+      if (container) {
+        container.textContent = 'Transcript unavailable';
       }
-    }
-    const container = document.getElementById('transcript');
-    if (container) {
-      container.textContent = finalTranscript + interim;
-    }
-  };
-
-  const attach = (audio) => {
-    if (!audio) return;
-    audio.addEventListener('play', () => recognition.start());
-    audio.addEventListener('pause', () => recognition.stop());
-    audio.addEventListener('ended', () => recognition.stop());
-  };
-
-  window.attachTranscription = attach;
-} else {
-  window.attachTranscription = () => {
-    const container = document.getElementById('transcript');
-    if (container) {
-      container.textContent = 'Transcription unavailable: browser does not support Speech Recognition.';
-    }
-    console.warn(
-      'Speech recognition not supported. Use a modern browser like Chrome or Edge over HTTPS.'
-    );
-  };
+      console.error('Failed to load transcript:', err);
+    });
 }
+window.attachTranscription = attachTranscription;
