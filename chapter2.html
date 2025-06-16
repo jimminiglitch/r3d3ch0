@@ -110,7 +110,6 @@
 
   <div class="audio-container">
     <audio id="chapter2audio" crossorigin="anonymous" controls>
-      <source src="https://cdn.glitch.me/b1804eef-ad83-4ae9-af9f-1fba1e23a51b/NepoCorpHQ.wav?v=1743097162391" type="audio/wav">
       Your browser does not support the audio element.
     </audio>
   </div>
@@ -148,6 +147,21 @@
   const audio = document.getElementById("chapter2audio");
   const startBtn = document.getElementById("startBtn");
   const continueBtn = document.getElementById("continueBtn");
+
+  const audioSources = ["nepocorp1.mp3", "nepocorp2.mp3"];
+  let currentSource = 0;
+  function loadCurrentSource() {
+    audio.src = audioSources[currentSource];
+    audio.load();
+  }
+  audio.addEventListener("ended", () => {
+    currentSource += 1;
+    if (currentSource < audioSources.length) {
+      loadCurrentSource();
+      audio.play();
+    }
+  });
+  loadCurrentSource();
   attachTranscription(audio, 'transcripts/chapter2.txt');
   function skipText() {
     audio.pause();
