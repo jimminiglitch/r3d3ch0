@@ -313,7 +313,7 @@
 <script src="js/transcribe.js"></script>
 <script>
   const transcriptContainer = document.getElementById("transcript");
-  attachTranscription(audio);
+  attachTranscription(audio, 'transcripts/chapter0.txt');
   const continueBtn = document.getElementById("continueBtn");
   function skipText() {
     audio.pause();

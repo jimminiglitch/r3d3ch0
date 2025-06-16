@@ -132,7 +132,7 @@
     <iframe
       src="https://nepocorphq.glitch.me/"
       title="NepoCorpHQ"
-      allow="geolocation; microphone; camera; midi; encrypted-media; xr-spatial-tracking; fullscreen"
+      allow="geolocation; camera; midi; encrypted-media; xr-spatial-tracking; fullscreen"
       allowfullscreen>
     </iframe>
   </div>
@@ -148,7 +148,7 @@
   const audio = document.getElementById("chapter2audio");
   const startBtn = document.getElementById("startBtn");
   const continueBtn = document.getElementById("continueBtn");
-  attachTranscription(audio);
+  attachTranscription(audio, 'transcripts/chapter2.txt');
   function skipText() {
     audio.pause();
     startBtn.style.opacity = 1;

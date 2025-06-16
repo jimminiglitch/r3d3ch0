@@ -158,7 +158,7 @@
       <iframe
         src="https://duderockarcade.glitch.me/"
         title="duderockarcade"
-        allow="geolocation; microphone; camera; midi; encrypted-media; xr-spatial-tracking; fullscreen"
+        allow="geolocation; camera; midi; encrypted-media; xr-spatial-tracking; fullscreen"
         allowfullscreen
       >
       </iframe>
@@ -175,7 +175,7 @@
   const audio = document.getElementById("chapter1audio");
   const startBtn = document.getElementById("startBtn");
   const continueBtn = document.getElementById("continueBtn");
-  attachTranscription(audio);
+  attachTranscription(audio, 'transcripts/chapter1.txt');
   function skipText() {
     audio.pause();
     startBtn.style.opacity = 1;
