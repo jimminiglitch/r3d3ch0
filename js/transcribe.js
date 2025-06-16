@@ -26,21 +26,6 @@ function attachTranscription(audio, transcriptUrl) {
       }
 
       let active = -1;
-      let typingTimer;
-
-      const typeCaption = (text, duration) => {
-        clearInterval(typingTimer);
-        container.textContent = '';
-        let index = 0;
-        const delay = Math.max(duration / Math.max(text.length, 1), 0.01) * 1000;
-        typingTimer = setInterval(() => {
-          container.textContent += text.charAt(index);
-          index++;
-          if (index >= text.length) {
-            clearInterval(typingTimer);
-          }
-        }, delay);
-      };
 
       const update = () => {
         const t = audio.currentTime;
@@ -48,10 +33,8 @@ function attachTranscription(audio, transcriptUrl) {
         for (let i = 0; i < captions.length; i++) {
           const c = captions[i];
           if (t >= c.start && t <= c.end) {
-
             if (i !== active) {
-              typeCaption(c.text, c.end - c.start);
-
+              container.textContent = '';
               active = i;
             }
             const progress = (t - c.start) / (c.end - c.start);
@@ -62,9 +45,7 @@ function attachTranscription(audio, transcriptUrl) {
           }
         }
 
-        if (active !== -1) {
-          clearInterval(typingTimer);
-
+        if (!found && active !== -1) {
           container.textContent = '';
           active = -1;
         }
