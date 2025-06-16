@@ -18,9 +18,10 @@
   <label><input type="checkbox" id="radarToggle" checked> Show Radar</label>
   <label style="margin-left:1em"><input type="checkbox" id="gridToggle" checked> Show Grid</label>
 </details>
-<details id="mapSection">
+<details id="mapSection" open>
   <summary>Map</summary>
   <div id="map"></div>
+  <div id="radarStatus" style="font-size:0.9em;margin-top:4px;"></div>
 </details>
 <details id="gridSection">
   <summary>Weather Grid Info</summary>
@@ -34,7 +35,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let radarLayer;
+const status = document.getElementById('radarStatus');
 function loadRadar() {
+  status.textContent = 'Loading radar…';
   fetch('https://tilecache.rainviewer.com/api/maps.json')
     .then(r => r.json())
     .then(times => {
@@ -42,8 +45,12 @@ function loadRadar() {
       radarLayer = L.tileLayer(`https://tilecache.rainviewer.com/v2/radar/${ts}/256/{z}/{x}/{y}/2/1_1.png`, {
         attribution: '&copy; RainViewer', opacity: 0.6
       }).addTo(map);
+      status.textContent = '';
     })
-    .catch(err => console.error('Radar load error:', err));
+    .catch(err => {
+      console.error('Radar load error:', err);
+      status.textContent = 'Radar unavailable';
+    });
 }
 loadRadar();
 
@@ -61,6 +68,10 @@ gridLayer.addTo(map);
 document.getElementById('radarToggle').addEventListener('change',function(){
   if(this.checked){ if(!radarLayer) loadRadar(); else map.addLayer(radarLayer); }
   else if(radarLayer){ map.removeLayer(radarLayer); }
+});
+
+document.getElementById('mapSection').addEventListener('toggle',function(){
+  if(this.open) map.invalidateSize();
 });
 
 document.getElementById('gridToggle').addEventListener('change',function(){
