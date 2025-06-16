@@ -44,18 +44,27 @@ function attachTranscription(audio, transcriptUrl) {
 
       const update = () => {
         const t = audio.currentTime;
+        let found = false;
         for (let i = 0; i < captions.length; i++) {
           const c = captions[i];
           if (t >= c.start && t <= c.end) {
+
             if (i !== active) {
               typeCaption(c.text, c.end - c.start);
+
               active = i;
             }
-            return;
+            const progress = (t - c.start) / (c.end - c.start);
+            const len = Math.floor(progress * c.text.length);
+            container.textContent = c.text.slice(0, len);
+            found = true;
+            break;
           }
         }
+
         if (active !== -1) {
           clearInterval(typingTimer);
+
           container.textContent = '';
           active = -1;
         }
