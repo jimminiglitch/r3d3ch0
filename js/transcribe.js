@@ -26,19 +26,36 @@ function attachTranscription(audio, transcriptUrl) {
       }
 
       let active = -1;
+      let typingTimer;
+
+      const typeCaption = (text, duration) => {
+        clearInterval(typingTimer);
+        container.textContent = '';
+        let index = 0;
+        const delay = Math.max(duration / Math.max(text.length, 1), 0.01) * 1000;
+        typingTimer = setInterval(() => {
+          container.textContent += text.charAt(index);
+          index++;
+          if (index >= text.length) {
+            clearInterval(typingTimer);
+          }
+        }, delay);
+      };
+
       const update = () => {
         const t = audio.currentTime;
         for (let i = 0; i < captions.length; i++) {
           const c = captions[i];
           if (t >= c.start && t <= c.end) {
             if (i !== active) {
-              container.textContent = c.text;
+              typeCaption(c.text, c.end - c.start);
               active = i;
             }
             return;
           }
         }
         if (active !== -1) {
+          clearInterval(typingTimer);
           container.textContent = '';
           active = -1;
         }
