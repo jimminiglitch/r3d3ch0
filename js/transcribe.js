@@ -5,22 +5,48 @@ function attachTranscription(audio, transcriptUrl) {
     .then((text) => {
       const container = document.getElementById('transcript');
       if (!container) return;
-      let index = 0;
-      let timer;
-      const type = () => {
-        if (index <= text.length) {
-          container.textContent = text.slice(0, index);
-          index += 1;
-        } else {
-          clearInterval(timer);
+
+      const parseTime = (t) => {
+        const [hms, ms] = t.split(',');
+        const [h, m, s] = hms.split(':').map(Number);
+        return h * 3600 + m * 60 + parseFloat(s) + (ms ? parseInt(ms, 10) / 1000 : 0);
+      };
+
+      const captions = [];
+      const blocks = text.trim().split(/\n\n+/);
+      for (const block of blocks) {
+        const lines = block.split(/\n+/);
+        if (lines.length >= 3) {
+          const times = lines[1].split('-->');
+          const start = parseTime(times[0].trim());
+          const end = parseTime(times[1].trim());
+          const captionText = lines.slice(2).join(' ');
+          captions.push({ start, end, text: captionText });
+        }
+      }
+
+      let active = -1;
+      const update = () => {
+        const t = audio.currentTime;
+        for (let i = 0; i < captions.length; i++) {
+          const c = captions[i];
+          if (t >= c.start && t <= c.end) {
+            if (i !== active) {
+              container.textContent = c.text;
+              active = i;
+            }
+            return;
+          }
+        }
+        if (active !== -1) {
+          container.textContent = '';
+          active = -1;
         }
       };
-      audio.addEventListener('play', () => {
-        timer = setInterval(type, 50);
-      });
-      const stop = () => clearInterval(timer);
-      audio.addEventListener('pause', stop);
-      audio.addEventListener('ended', stop);
+
+      audio.addEventListener('timeupdate', update);
+      audio.addEventListener('seeked', update);
+      update();
     })
     .catch((err) => {
       const container = document.getElementById('transcript');
@@ -30,4 +56,5 @@ function attachTranscription(audio, transcriptUrl) {
       console.error('Failed to load transcript:', err);
     });
 }
+
 window.attachTranscription = attachTranscription;
