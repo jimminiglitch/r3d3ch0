@@ -154,16 +154,6 @@
         max-width: 600px;
         outline: none;
       }
-      .audio-speed {
-        text-align: center;
-        margin: 0.5rem auto 1.5rem;
-        font-size: 0.9rem;
-        position: relative;
-        z-index: 1;
-      }
-      .audio-speed label {
-        margin-right: 0.5rem;
-      }
       .map-container {
         width: 90%;
         max-width: 800px;
@@ -190,41 +180,6 @@
         overflow: hidden;
         white-space: pre-wrap;
       }
-      /* Text speed controls */
-      .speed-control {
-        text-align: center;
-        margin: 1rem auto;
-        position: relative;
-        z-index: 1;
-      }
-      .speed-control p {
-        margin-bottom: 0.5rem;
-      }
-      .speed-control button {
-        background: black;
-        color: #ff1493;
-        font-family: "Share Tech Mono", monospace;
-        border: 2px solid #39ff14;
-        margin: 0.25rem;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s;
-      }
-      .speed-control button.active {
-        background-color: #ff1493;
-        color: black;
-      }
-      /* Continue Button */
-      .continue-btn {
-        display: block;
-        margin: 2rem auto;
-        background: #ff1493;
-        color: black;
-        font-size: 1rem;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 5px;
         font-family: "Share Tech Mono", monospace;
         cursor: pointer;
         transition: all 0.3s;
@@ -284,29 +239,8 @@
         Your browser does not support the audio element.
       </audio>
         <canvas id="visualizerCanvas" width="700" height="100"></canvas>
-      <div class="audio-speed">
-        <label for="audioSpeed">Playback Speed:</label>
-        <input
-          type="range"
-          id="audioSpeed"
-          min="0.5"
-          max="2"
-          step="0.1"
-          value="1"
-        />
-      </div>
     </div>
 
-
-    <!-- Text Speed Control -->
-    <div class="speed-control">
-      <p>Text Speed:</p>
-      <button data-speed="20">Very Fast</button>
-      <button data-speed="40" class="active">Fast</button>
-      <button data-speed="80">Medium</button>
-      <button data-speed="160">Slow</button>
-      <button data-speed="320">Very Slow</button>
-    </div>
 
     <!-- Transcript Container -->
     <div class="transcript" id="transcript"></div>
@@ -318,10 +252,9 @@
 
     <!-- Skip & Continue Buttons -->
     <button class="skip-btn" id="skipBtn" onclick="skipText()">Skip</button>
-    <button class="continue-btn" id="continueBtn" onclick="triggerFlicker()">
-      Continue &gt;
-    </button>
-
+      <button class="continue-btn" id="continueBtn" onclick="triggerFlicker()">
+        Continue &gt;
+      </button>
 <script>
   const audio = document.getElementById('chapterAudio'); // Your existing audio element
   const canvas = document.getElementById('visualizerCanvas');
@@ -380,19 +313,8 @@
 <script src="js/transcribe.js"></script>
 <script>
   const transcriptContainer = document.getElementById("transcript");
-  const audioSpeedInput = document.getElementById("audioSpeed");
-  const speedButtons = document.querySelectorAll(".speed-control button");
-  const continueBtn = document.getElementById("continueBtn");
-  audioSpeedInput.addEventListener("input", () => {
-    audio.playbackRate = parseFloat(audioSpeedInput.value);
-  });
-  speedButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      speedButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-  });
   attachTranscription(audio);
+  const continueBtn = document.getElementById("continueBtn");
   function skipText() {
     audio.pause();
     continueBtn.style.opacity = "1";
