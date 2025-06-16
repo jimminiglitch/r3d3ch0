@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Weather Map Demo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
+<style>
+  body { font-family: Arial, sans-serif; background:#000; color:#fff; margin:0; padding:0; }
+  #map { height:400px; }
+  details { margin:10px 0; }
+  summary { cursor:pointer; font-weight:bold; }
+</style>
+</head>
+<body>
+<details open id="filterSection">
+  <summary>Data Filters</summary>
+  <label><input type="checkbox" id="radarToggle" checked> Show Radar</label>
+  <label style="margin-left:1em"><input type="checkbox" id="gridToggle" checked> Show Grid</label>
+</details>
+<details open id="mapSection">
+  <summary>Map</summary>
+  <div id="map"></div>
+</details>
+<details open id="gridSection">
+  <summary>Weather Grid Info</summary>
+  <p>The grid overlay helps visualize tile boundaries.</p>
+</details>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([40.7, -74], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+let radarLayer;
+function loadRadar() {
+  fetch('https://tilecache.rainviewer.com/api/maps.json')
+    .then(r => r.json())
+    .then(times => {
+      const ts = times[times.length - 1];
+      radarLayer = L.tileLayer(`https://tilecache.rainviewer.com/v2/radar/${ts}/256/{z}/{x}/{y}/2/1_1.png`, {
+        attribution: '&copy; RainViewer', opacity: 0.6
+      }).addTo(map);
+    });
+}
+loadRadar();
+
+const gridLayer = L.gridLayer({pane:'overlayPane'});
+gridLayer.createTile = function(coords){
+  const tile = document.createElement('canvas');
+  tile.width = tile.height = 256;
+  const ctx = tile.getContext('2d');
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+  ctx.strokeRect(0,0,256,256);
+  return tile;
+};
+gridLayer.addTo(map);
+
+document.getElementById('radarToggle').addEventListener('change',function(){
+  if(this.checked){ if(!radarLayer) loadRadar(); else map.addLayer(radarLayer); }
+  else if(radarLayer){ map.removeLayer(radarLayer); }
+});
+
+document.getElementById('gridToggle').addEventListener('change',function(){
+  if(this.checked) map.addLayer(gridLayer); else map.removeLayer(gridLayer);
+});
+</script>
+</body>
+</html>
