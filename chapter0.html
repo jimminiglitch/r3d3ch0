@@ -155,6 +155,15 @@
       .audio-speed label {
         margin-right: 0.5rem;
       }
+      .map-container {
+        width: 90%;
+        max-width: 800px;
+        margin: 1.5rem auto;
+        border: 2px solid #ff1493;
+        box-shadow: 0 0 20px #ff1493;
+        border-radius: 10px;
+        overflow: hidden;
+      }
       /* Transcript Box */
       .transcript {
         max-width: 800px;
@@ -275,6 +284,11 @@
           value="1"
         />
       </div>
+    </div>
+
+    <!-- Interactive Map -->
+    <div class="map-container">
+      <iframe src="gowanus_interactive_map.html" width="100%" height="450" style="border:none"></iframe>
     </div>
 
     <!-- Text Speed Control -->
