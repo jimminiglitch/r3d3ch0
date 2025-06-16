@@ -1,5 +1,6 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SpeechRecognition) {
+const supportsRecognition = !!SpeechRecognition && window.isSecureContext;
+if (supportsRecognition) {
   const recognition = new SpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
@@ -32,6 +33,12 @@ if (SpeechRecognition) {
   window.attachTranscription = attach;
 } else {
   window.attachTranscription = () => {
-    console.warn('Speech recognition not supported');
+    const container = document.getElementById('transcript');
+    if (container) {
+      container.textContent = 'Transcription unavailable: browser does not support Speech Recognition.';
+    }
+    console.warn(
+      'Speech recognition not supported. Use a modern browser like Chrome or Edge over HTTPS.'
+    );
   };
 }
