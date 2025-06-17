@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Rave</title>
+  <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+  <style>
+    body { margin: 0; background: #000; }
+    #overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #39ff14;
+      font-family: "Share Tech Mono", monospace;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">W/A/S/D to move, mouse to look</div>
+  <a-scene>
+    <a-assets>
+      <audio id="rave-track" src="nepocorp1.mp3"></audio>
+    </a-assets>
+    <a-entity sound="src: #rave-track; autoplay: true; loop: true" position="0 1.6 0"></a-entity>
+    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+    <a-sphere position="1 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+    <a-cylinder position="0 0.75 -2" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+    <a-plane rotation="-90 0 0" width="20" height="20" color="#222"></a-plane>
+    <a-sky color="#000"></a-sky>
+  </a-scene>
+</body>
+</html>
