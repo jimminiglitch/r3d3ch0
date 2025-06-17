@@ -184,6 +184,12 @@
       triggerBlackout();
     }, 2000);
   }
+  function triggerFlicker() {
+    document.body.classList.add("flicker");
+    setTimeout(() => {
+      triggerGlitchOverlay();
+    }, 300);
+  }
   function triggerBlackout() {
     const blackoutOverlay = document.createElement("div");
     blackoutOverlay.className = "blackout-overlay";

@@ -183,6 +183,12 @@
       }, 10000);
     }, 400);
   }
+  function triggerFlicker() {
+    document.body.classList.add("flicker");
+    setTimeout(() => {
+      window.location.href = "chapter3.html";
+    }, 300);
+  }
 </script>
 </body>
 </html>

@@ -153,8 +153,8 @@
 
     <div id="gameEmbed" class="game-embed">
       <iframe
-        src="https://duderockarcade.glitch.me/"
-        title="duderockarcade"
+        src="https://jimminiglitch.github.io/dudrockarcade"
+        title="dudrockarcade"
         allow="geolocation; camera; midi; encrypted-media; xr-spatial-tracking; fullscreen"
         allowfullscreen
       >
@@ -192,6 +192,12 @@
         continueBtn.style.pointerEvents = "auto";
       }, 10000);
     }, 400);
+  }
+  function triggerFlicker() {
+    document.body.classList.add("flicker");
+    setTimeout(() => {
+      window.location.href = "chapter2.html";
+    }, 300);
   }
 </script>
   </body>
