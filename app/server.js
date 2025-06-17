@@ -32,6 +32,11 @@ fastify.get("/chapter3", function (request, reply) {
   return reply.sendFile("chapter3.html");
 });
 
+// 3D rave experience
+fastify.get("/3drave", function (request, reply) {
+  return reply.sendFile("3drave.html");
+});
+
 
 // ===== START SERVER =====
 fastify.listen({ port: process.env.PORT, host: "0.0.0.0" }, function (err, address) {
