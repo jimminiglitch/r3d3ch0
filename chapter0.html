@@ -180,6 +180,15 @@
         overflow: hidden;
         white-space: pre-wrap;
       }
+      .continue-btn {
+        display: block;
+        margin: 1rem auto;
+        background: #ff1493;
+        color: black;
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
         font-family: "Share Tech Mono", monospace;
         cursor: pointer;
         transition: all 0.3s;
@@ -320,6 +329,10 @@
   const transcriptContainer = document.getElementById("transcript");
   attachTranscription(audio, 'transcripts/chapter0.txt');
   const continueBtn = document.getElementById("continueBtn");
+  audio.addEventListener('ended', () => {
+    continueBtn.style.opacity = '1';
+    continueBtn.style.pointerEvents = 'auto';
+  });
   function skipText() {
     audio.pause();
     continueBtn.style.opacity = "1";
